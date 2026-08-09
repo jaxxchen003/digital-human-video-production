@@ -1,0 +1,26 @@
+.DS_Store
+.env
+.env.*
+.heygen/
+.connector/
+*.key
+*.pem
+node_modules/
+__pycache__/
+*.py[cod]
+
+# Local production media and provider artifacts
+audio/**/*.wav
+audio/**/*.mp3
+presenter/**/*.mp4
+presenter/**/*.mov
+deliverables/**/*.mp4
+deliverables/**/*.mov
+remotion-compositor/public/audio/*
+remotion-compositor/public/avatar/*
+remotion-compositor/public/base/*
+remotion-compositor/out/
+
+# Keep redacted manifests and text artifacts trackable; ignore raw job logs.
+**/*heygen*job*.json
+**/*heygen*log*.jsonl
