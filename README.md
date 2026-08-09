@@ -14,7 +14,7 @@
 - 画中画从开场主画面过渡到角落小窗；
 - 字幕、音频、画面和最终交付 QC。
 
-[观看/下载 Demo 视频（720p 公开预览）](https://github.com/jaxxchen003/digital-human-video-production/blob/main/demo/digital-human-video-demo.mp4)
+[观看/下载 Demo 视频（720p Release 公开预览）](https://github.com/jaxxchen003/digital-human-video-production/releases/download/v0.1.0/digital-human-video-demo-preview.mp4)
 
 公开 Demo 是当前成片的 720p 预览编码：16:9、1280×720、30fps、约 148.46 秒、H.264/AAC；本地母带仍为 1920×1080。视频中的品牌、页面和文案仅属于该示例项目，不应复制到其他项目。
 
@@ -143,7 +143,7 @@ flowchart LR
 
 1. 不把音频、视频、客户页面、私有截图、token、cookie 或 `.env` 提交到 skill。
 2. 字体、Logo、音乐、SFX、模型和页面素材分别记录授权与归属。
-3. 大型 Demo 媒体优先使用 Git LFS、Release 或对象存储；本仓库的单个 Demo 是独立示例文件，不属于 skill 核心。
+3. 大型 Demo 媒体优先使用 Git LFS、Release 或对象存储；本项目 Demo 作为 Release 资产提供，不属于 skill 核心。
 
 ## 质量把控
 
@@ -209,8 +209,6 @@ python3 scripts/validate_delivery.py \
 │   ├── init_project.py
 │   ├── build_avatar_schedule.py
 │   └── validate_delivery.py
-├── demo/
-│   └── digital-human-video-demo.mp4  # Git LFS；非规范性示例
 ├── LICENSE
 └── README.md
 ```
