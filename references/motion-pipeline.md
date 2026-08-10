@@ -4,12 +4,13 @@ The motion layer owns information-first frames and scene packets. The compositor
 owns deterministic timing, captions, presenter overlay, and the final render.
 The locked voice manifest is the clock shared by both.
 
-In the reference implementation, **HyperFrames** produces or validates the
-scene packets/base motion and **Remotion** performs the local React/TypeScript
-composition. They are deliberately separate: HyperFrames decides what the
-shot communicates; Remotion decides when and where each layer appears. Either
-layer can be replaced when the project preserves the same scene-packet,
-timecode, and QC contracts.
+In the reference implementation, **HyperFrames** owns the HTML/timeline layer
+and **GSAP** is its default seek-safe animation runtime. **Remotion** performs
+the local React/TypeScript composition when the project uses a Remotion output
+path. They are deliberately separate: HyperFrames/GSAP decides what the shot
+communicates and how it animates; Remotion decides when and where each layer
+appears in the final composition. Either layer can be replaced when the project
+preserves the same scene-packet, timecode, and QC contracts.
 
 ## Shot grammar
 

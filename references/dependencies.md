@@ -13,7 +13,7 @@ brand, page copy, or customer material into the public repository.
 | --- | --- | --- | --- | --- |
 | voice | VoxCPM / VoxCPM2 | approved script, local clone/reference profile | locked PCM WAV + generation manifest | model weights, reference audio, prompts, and local paths |
 | presenter | HeyGen Photo Avatar / HeyGen Avatar API | locked WAV + approved avatar profile | 12–15s preview, then one full presenter master | account, avatar/profile ID, job ID, source image, API key |
-| motion | HyperFrames | scene manifest, capture assets, brand tokens from the project | scene packets, base visuals, motion-check evidence | project assets and any private renderer configuration |
+| motion | HyperFrames + GSAP (default runtime) | scene manifest, capture assets, brand tokens from the project | seek-safe scene packets, base visuals, motion-check evidence | project assets and any private renderer configuration |
 | compositor | Remotion | locked voice clock, presenter master, base visuals, captions | deterministic PIP/caption composition and final render | project source, fonts, environment variables |
 | media/QC | FFmpeg + ffprobe + Python | rendered media and QC thresholds | encoded delivery, metadata/QC JSON, checksums | none; keep raw logs in the project when they contain paths |
 
@@ -23,7 +23,7 @@ The reference handoff is:
 VoxCPM locked WAV
   → HeyGen preview approval
   → HeyGen full presenter master
-  → HyperFrames scene packets/base motion
+  → HyperFrames + GSAP scene packets/base motion
   → Remotion local PIP + captions + composition
   → FFmpeg/ffprobe encode + QC
 ```
@@ -52,7 +52,7 @@ The reference implementation is intentionally small:
 - `ffprobe` and `ffmpeg` for media metadata and optional audio/black-frame checks;
 - Node.js/npm plus Remotion's package manager and render commands for the default
   deterministic compositor;
-- HyperFrames CLI/checker (or the project's equivalent motion validator);
+- HyperFrames CLI/checker plus the selected runtime package (GSAP by default);
 - VoxCPM/VoxCPM2 local runtime for the default voice path;
 - an authenticated HeyGen adapter only during the private preview/full-master
   generation step;
@@ -91,6 +91,7 @@ ffprobe -version
 ffmpeg -version
 node --version
 renderer package/version
+animation runtime/version
 motion checker/version
 provider engine/model/version (redacted IDs)
 ```

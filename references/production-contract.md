@@ -23,7 +23,7 @@ topic, copy, visual identity, or provider.
   "reference_stack": {
     "voice": "VoxCPM/VoxCPM2",
     "presenter": "HeyGen Photo Avatar/Avatar API",
-    "motion": "HyperFrames",
+    "motion": "HyperFrames + GSAP",
     "compositor": "Remotion",
     "media_qc": "FFmpeg + ffprobe + Python"
   },
@@ -116,7 +116,7 @@ invariants: one timing authority, explicit approvals, local composition, source
 provenance, and a machine-readable final QC report.
 
 `reference_stack` is an implementation note, not a content field. Keep it
-explicit when using the documented VoxCPM → HeyGen → HyperFrames → Remotion
-path; update it when a project selects an alternative. Never place a product
+explicit when using the documented VoxCPM → HeyGen → HyperFrames + GSAP →
+Remotion path; update it when a project selects an alternative. Never place a product
 brand, customer page, provider credential, or private asset ID in the public
 skill manifest.

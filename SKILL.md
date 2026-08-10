@@ -18,7 +18,7 @@ The documented reference path is explicit about tools while remaining portable:
 ```text
 VoxCPM / VoxCPM2 (voice clone)
   → HeyGen Photo Avatar / Avatar API (presenter preview + one full master)
-  → HyperFrames (scene packets and base motion)
+  → HyperFrames + GSAP (scene packets and seek-safe motion)
   → Remotion (deterministic local composition)
   → FFmpeg + ffprobe + Python (encode and QC)
 ```

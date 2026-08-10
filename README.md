@@ -40,7 +40,7 @@
 | --- | --- | --- | --- | --- |
 | 语音 | **VoxCPM / VoxCPM2**（本地语音克隆） | 生成锁定的 WAV、短语级节奏和生成 manifest | 参考路径必选 | 任意能输出 WAV + 时间/生成记录的本地或云端 TTS/克隆引擎 |
 | 数字人 | **HeyGen Photo Avatar / HeyGen Avatar API** | 用锁定音频生成 12–15 秒预览，再生成一条完整 presenter master | 使用数字人时必选 | 本地 talking-head、真人录制或其他 Avatar API；仍需保留预览门和一次完整母带 |
-| 动效 | **HyperFrames** | 组织 scene packet、信息层级、镜头动作和动效检查 | 参考路径必选 | 等价的 React/HTML、动效工具或 NLE；必须输出可校验的镜头时间线 |
+| 动效 | **HyperFrames + GSAP**（HyperFrames 默认 runtime） | 组织 scene packet、信息层级、可 seek 镜头动作和动效检查 | 参考路径必选 | HyperFrames 的 CSS/WAAPI 等 runtime，或等价的 React/HTML、动效工具、NLE；必须输出可校验的镜头时间线 |
 | 合成 | **Remotion** | 按确定性时间线合成画面、PIP、字幕和音频 | 参考路径必选 | FFmpeg filter graph、NLE 或其他可复现合成器 |
 | 媒体与 QC | **FFmpeg + ffprobe + Python** | 编码、元数据、响度、黑帧、冻结帧、校验和与交付报告 | `ffmpeg`/`ffprobe` 必选 | 等价媒体工具，但必须保留机器检查和人工观看证据 |
 | 字幕/对齐 | Whisper 或其他 ASR | 词级时间戳、字幕和旁白一致性检查 | 可选 | 任意能生成可审计时间戳的 ASR |
@@ -50,7 +50,7 @@
 ```text
 VoxCPM 锁定 WAV
   → HeyGen 预览与完整 presenter master
-  → HyperFrames scene packet / base motion
+  → HyperFrames + GSAP scene packet / base motion
   → Remotion PIP、字幕与确定性合成
   → FFmpeg/ffprobe 编码与 QC
 ```
@@ -62,7 +62,7 @@ VoxCPM 锁定 WAV
 - Python 3：运行仓库自带的标准库脚本；
 - `ffmpeg` / `ffprobe`：媒体元数据、响度、黑帧和基础交付检查；
 - Node.js/npm：运行 Remotion 或其他 React/TypeScript 合成器；
-- HyperFrames 的 CLI/checker（如果项目采用该参考路径）；
+- HyperFrames 的 CLI/checker，以及其采用的动画 runtime（参考路径默认是 GSAP）；
 - HeyGen 的账号/API 或已授权的应用工作流，仅由项目私有 adapter 调用；
 - VoxCPM/VoxCPM2 的本地运行环境、模型权重和参考音频，仅由项目私有 runbook 管理；
 - 浏览器录制、设计导出或素材库，用于提供真实产品页面与合法素材；
