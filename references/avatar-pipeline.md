@@ -4,6 +4,22 @@ An avatar/talking-head provider (for example, HeyGen) is used for one presenter
 master, not as the scene compositor. The host workflow supplies the private
 profile, asset ID, and credentials from a local secret store.
 
+## Reference provider contract
+
+The documented reference path uses **HeyGen Photo Avatar / HeyGen Avatar API**:
+
+- input: the exact locked WAV plus a project-approved avatar/profile;
+- first output: a 12–15 second preview for human review;
+- second output: one full presenter master after the preview gate passes;
+- local handoff: the full master is cropped, masked, resized, hidden, or moved
+  into PIP by the local compositor.
+
+HeyGen is a technology dependency, not a content dependency. A project may
+substitute a local talking-head renderer or filmed presenter, but it must keep
+the same preview → approval → one full master boundary. Check the current
+HeyGen feature, consent, retention, and export behavior in the private runbook
+before uploading face or customer material.
+
 ## Boundary
 
 ```text

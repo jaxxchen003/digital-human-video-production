@@ -30,25 +30,46 @@
 | MCP/连接器演示 | 脱敏的请求与结果画面 | 不展示 token、cookie、私有 slug 或原始 header |
 | QC 与交付 | contact sheet、QC JSON、checksum | 自动检查与人工观看都通过才标记 final |
 
-## 依赖
+## 依赖与技术方案
 
-### 必要接口
+本 skill 明确记录一条可复现的参考技术栈，同时保留清晰的适配器边界。下面列出的是制作工具和运行依赖，不是视频里要介绍的品牌或产品；视频主题、产品事实、文案、颜色、字体和页面始终由每个项目的本地 manifest 提供。
+
+### 参考实现栈
+
+| 层 | 推荐方案 | 负责什么 | 必选性 | 可替换边界 |
+| --- | --- | --- | --- | --- |
+| 语音 | **VoxCPM / VoxCPM2**（本地语音克隆） | 生成锁定的 WAV、短语级节奏和生成 manifest | 参考路径必选 | 任意能输出 WAV + 时间/生成记录的本地或云端 TTS/克隆引擎 |
+| 数字人 | **HeyGen Photo Avatar / HeyGen Avatar API** | 用锁定音频生成 12–15 秒预览，再生成一条完整 presenter master | 使用数字人时必选 | 本地 talking-head、真人录制或其他 Avatar API；仍需保留预览门和一次完整母带 |
+| 动效 | **HyperFrames** | 组织 scene packet、信息层级、镜头动作和动效检查 | 参考路径必选 | 等价的 React/HTML、动效工具或 NLE；必须输出可校验的镜头时间线 |
+| 合成 | **Remotion** | 按确定性时间线合成画面、PIP、字幕和音频 | 参考路径必选 | FFmpeg filter graph、NLE 或其他可复现合成器 |
+| 媒体与 QC | **FFmpeg + ffprobe + Python** | 编码、元数据、响度、黑帧、冻结帧、校验和与交付报告 | `ffmpeg`/`ffprobe` 必选 | 等价媒体工具，但必须保留机器检查和人工观看证据 |
+| 字幕/对齐 | Whisper 或其他 ASR | 词级时间戳、字幕和旁白一致性检查 | 可选 | 任意能生成可审计时间戳的 ASR |
+
+参考路径可以概括为：
+
+```text
+VoxCPM 锁定 WAV
+  → HeyGen 预览与完整 presenter master
+  → HyperFrames scene packet / base motion
+  → Remotion PIP、字幕与确定性合成
+  → FFmpeg/ffprobe 编码与 QC
+```
+
+这张表描述“哪个工具解决哪类工程问题”，不规定内容中应该出现哪个品牌。供应商账号、HeyGen avatar/profile ID、VoxCPM 模型权重与参考音频、项目页面、客户素材和 API 凭据都必须留在项目私有目录或 secret store 中，不能写进公开 skill。
+
+### 运行依赖与私有边界
 
 - Python 3：运行仓库自带的标准库脚本；
 - `ffmpeg` / `ffprobe`：媒体元数据、响度、黑帧和基础交付检查；
-- 一个语音生成或语音克隆引擎：可以是本地模型或受控的云端服务；
-- 一个数字人/真人口播渲染器：可以是 Avatar API、本地 talking-head 模型或实拍素材；
-- 一个动效层和一个确定性合成器：可以是 HyperFrames/Remotion，也可以替换为等价工具；
-- 浏览器录制、设计导出或素材库，用于提供真实产品页面与合法素材。
+- Node.js/npm：运行 Remotion 或其他 React/TypeScript 合成器；
+- HyperFrames 的 CLI/checker（如果项目采用该参考路径）；
+- HeyGen 的账号/API 或已授权的应用工作流，仅由项目私有 adapter 调用；
+- VoxCPM/VoxCPM2 的本地运行环境、模型权重和参考音频，仅由项目私有 runbook 管理；
+- 浏览器录制、设计导出或素材库，用于提供真实产品页面与合法素材；
+- 可选的 Git LFS、对象存储或 GitHub Release，用于存放不适合进入普通 Git 历史的大型 Demo 媒体；
+- 可选的 MCP/连接器客户端，用于演示工具调用或发布结果。
 
-### 可选依赖
-
-- Node.js/npm：使用 React/Remotion 类合成器时需要；
-- ASR/Whisper：用于词级时间戳、字幕和旁白一致性检查；
-- Git LFS、对象存储或 GitHub Release：存放不适合进入普通 Git 历史的大型 Demo 媒体；
-- MCP/连接器客户端：演示工具调用或发布结果时使用。
-
-云端语音、脸部或客户素材的上传必须由项目自己的私有适配器完成。仓库不会自动调用供应商、上传媒体或保存凭据。
+公开仓库只提供接口、脚本、规则和校验方法，不包含供应商 SDK、上传逻辑、账号授权、模型权重或产品内容。云端语音、脸部或客户素材的上传必须由项目自己的私有适配器完成。
 
 ## 安装与使用
 

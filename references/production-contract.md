@@ -20,6 +20,13 @@ topic, copy, visual identity, or provider.
   "voice": {"provider": "local-clone", "model": ""},
   "presenter": {"provider": "avatar-or-talking-head", "profile": ""},
   "renderers": ["motion-engine", "compositor"],
+  "reference_stack": {
+    "voice": "VoxCPM/VoxCPM2",
+    "presenter": "HeyGen Photo Avatar/Avatar API",
+    "motion": "HyperFrames",
+    "compositor": "Remotion",
+    "media_qc": "FFmpeg + ffprobe + Python"
+  },
   "approved_audio": "audio/narration-master.wav",
   "presenter_layout": {
     "opening_mode": "prominent",
@@ -107,3 +114,9 @@ Projects may replace the voice engine, avatar provider, motion renderer,
 compositor, language, aspect ratio, caption style, or PIP geometry. Preserve the
 invariants: one timing authority, explicit approvals, local composition, source
 provenance, and a machine-readable final QC report.
+
+`reference_stack` is an implementation note, not a content field. Keep it
+explicit when using the documented VoxCPM → HeyGen → HyperFrames → Remotion
+path; update it when a project selects an alternative. Never place a product
+brand, customer page, provider credential, or private asset ID in the public
+skill manifest.

@@ -11,6 +11,24 @@ presenter previews, shot/timeline artifacts, local motion and compositing, and a
 verifiable final delivery. Product copy, visual identity, and audience examples
 are deliberately variables supplied by each project.
 
+## Reference technology stack
+
+The documented reference path is explicit about tools while remaining portable:
+
+```text
+VoxCPM / VoxCPM2 (voice clone)
+  → HeyGen Photo Avatar / Avatar API (presenter preview + one full master)
+  → HyperFrames (scene packets and base motion)
+  → Remotion (deterministic local composition)
+  → FFmpeg + ffprobe + Python (encode and QC)
+```
+
+These names describe implementation dependencies, not the product or brand that
+the video explains. Each layer has a replaceable adapter; see
+`references/dependencies.md` for input/output contracts, required setup, and
+private credential boundaries. The public skill never stores a HeyGen profile
+ID, VoxCPM model weights, customer media, API key, or project brand token.
+
 ## Workflow
 
 ### 1. Establish the project contract
@@ -39,7 +57,8 @@ examples, and state format, access, ownership, or deployment boundaries instead
 of implying capabilities that were not checked.
 
 Use `references/voice-pipeline.md` with the project's approved local voice clone
-(for example, VoxCPM or another supported engine):
+(the reference implementation uses VoxCPM/VoxCPM2; another supported engine may
+be substituted):
 
 1. generate a full candidate and deterministic scene-level artifacts;
 2. review the opening, densest explanation, and closing for timbre consistency;
@@ -55,7 +74,8 @@ change reopens the timeline gate.
 ### 3. Approve and render one presenter master
 
 Use `references/avatar-pipeline.md` with the chosen avatar/talking-head provider
-(for example, HeyGen or a local renderer):
+(the reference implementation uses HeyGen Photo Avatar/Avatar API; a local
+renderer or filmed presenter may be substituted):
 
 1. render a short preview from the exact approved WAV;
 2. inspect lip sync, eye contact, expression, breath-like pauses, crop, and
