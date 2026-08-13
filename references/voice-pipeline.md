@@ -40,6 +40,12 @@ then record the chosen values in the generation manifest.
 - Generate a short presenter preview from the exact locked audio, not a proxy
   recording.
 
+Write an approval artifact before any full presenter generation. It should
+contain the audio path, SHA-256, measured duration, approval timestamp, reviewer,
+and scope such as `presenter_full_master`. The full-master event must reference
+this artifact, and its audio checksum must match. A changed checksum invalidates
+the presenter preview, captions, scene timing, and downstream approval state.
+
 ## Human listening checklist
 
 - Does the first 40 seconds sound like the later version?

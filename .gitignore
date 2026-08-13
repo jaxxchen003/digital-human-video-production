@@ -24,3 +24,5 @@ remotion-compositor/out/
 # Keep redacted manifests and text artifacts trackable; ignore raw job logs.
 **/*heygen*job*.json
 **/*heygen*log*.jsonl
+logs/*.jsonl
+config/*face-centers*.json

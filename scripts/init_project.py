@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 DEFAULT_MANIFEST = {
+    "schema_version": "2.0",
     "title": "Product explainer",
     "language": "zh-CN",
     "audience": "AI beginners",
@@ -21,9 +22,19 @@ DEFAULT_MANIFEST = {
     "presenter_provider": "avatar-or-talking-head",
     "renderer": ["motion-engine", "compositor"],
     "approved_audio": "audio/narration-master.wav",
+    "audio_timing_authority": True,
+    "provider_generation_policy": {
+        "preview_required": True,
+        "human_preview_approval_required": True,
+        "full_master_budget": 1,
+        "scene_layout_changes_must_be_local": True,
+    },
     "presenter_layout": {
         "opening_fullscreen_seconds": 3.0,
-        "circle_diameter_px": 180,
+        "circle_diameter_px": 220,
+        "horizontal_margin_px": 42,
+        "bottom_margin_px": 66,
+        "target_face_center_ratio": {"x": 0.5, "y": 0.59},
         "allowed_positions": ["bottom-left", "bottom-right"],
         "later_fullscreen": False,
     },
@@ -44,6 +55,8 @@ DIRECTORIES = (
     "compositions/frames",
     "sources",
     "deliverables",
+    "logs",
+    "snapshots",
     "remotion-compositor/public/audio",
     "remotion-compositor/public/avatar",
     "remotion-compositor/public/base",
@@ -76,6 +89,10 @@ def main() -> int:
         "script.md": "# Script\n\nUse numbered scenes with one claim and one focal action per scene.\n",
         "config/narration-segments.json": '{"segments": []}\n',
         "config/avatar-schedule.json": "[]\n",
+        "config/approvals.json": '{"voice": null, "presenter_preview": null, "timeline": null, "delivery": null}\n',
+        "config/approved-holds.json": '{"holds": []}\n',
+        "config/pip-face-centers.example.json": '{"samples": [{"frame": 0, "x": 960, "y": 360}]}\n',
+        "logs/provider-generation.jsonl": "",
     }.items():
         path = root / name
         if not path.exists():

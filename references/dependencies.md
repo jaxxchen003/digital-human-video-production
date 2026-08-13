@@ -33,6 +33,31 @@ must satisfy the same artifact contract: one timing authority, an approved
 audio checksum, a short presenter preview before the full master, deterministic
 scene timing, local layout control, and machine-readable QC evidence.
 
+## Official dependency references
+
+Check these sources at implementation time and pin the versions actually used by
+the host project:
+
+- [OpenBMB/VoxCPM](https://github.com/OpenBMB/VoxCPM) — reference local voice
+  clone and WAV source;
+- [HeyGen Create Video API](https://developers.heygen.com/reference/create-video)
+  — current avatar/photo-avatar video request, uploaded-audio, engine, motion,
+  and asynchronous job contract;
+- [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) and its
+  [GSAP animation guide](https://hyperframes.app/docs/3-guides/3-gsap-animation)
+  — HTML composition and paused, seek-controlled motion runtime;
+- [Remotion rendering](https://www.remotion.dev/docs/render) and
+  [video component guidance](https://www.remotion.dev/docs/offthreadvideo) —
+  deterministic React composition and frame-accurate local video sources;
+- [FFmpeg](https://ffmpeg.org/documentation.html) — probing, decode validation,
+  EBU R128 loudness, black/freeze detection, contact sheets, and encoding;
+- [Python](https://docs.python.org/3/) — standard-library project and QC scripts.
+
+Provider schemas, defaults, quotas, pricing, and privacy behavior are temporal.
+Do not copy a request body from this skill without checking the current official
+contract. Prefer the current Remotion video component for the pinned version;
+older projects may still use `OffthreadVideo` intentionally.
+
 ## Required interfaces
 
 | interface | responsibility | replaceable by |
@@ -57,6 +82,12 @@ The reference implementation is intentionally small:
 - an authenticated HeyGen adapter only during the private preview/full-master
   generation step;
 - browser capture or design-export tooling for real product surfaces.
+
+No provider SDK is required by the public repository. `scripts/record_provider_job.py`
+records private state but never calls a provider. `scripts/build_pip_geometry.py`
+uses measurement data supplied by the project and does not bundle a face detector.
+`scripts/validate_delivery.py` requires local `ffmpeg` and `ffprobe` for the full
+gate; the remaining bundled scripts use only the Python standard library.
 
 Whisper/ASR is optional: use it when word-level captions or transcript
 consistency checks are required. Git LFS, a release asset, or object storage is
@@ -101,3 +132,19 @@ the three principal media checksums, and the exact command or job reference
 needed to recreate it without exposing secrets. For the reference stack, also
 record the VoxCPM generation settings, HeyGen preview approval event, HyperFrames
 scene-manifest version, Remotion render command, and FFmpeg encode parameters.
+
+## Method and motion references
+
+The following repositories influenced workflow or motion vocabulary. They are
+not runtime dependencies and their assets/code are not vendored here. License
+notes were checked on 2026-08-13 and must be rechecked before reuse:
+
+| reference | useful for | reuse boundary |
+| --- | --- | --- |
+| [video-shotcraft](https://github.com/Vincentwei1021/video-shotcraft) | shot cards, motion grammar, readable holds, Remotion examples | Apache-2.0 at review time; adapt principles and verify asset-level attribution |
+| [HyperFrames Motion Director](https://github.com/geekjourneyx/hyperframes-motion-director) | Chinese-first brief/design/storyboard contracts and HyperFrames review gates | AGPL-3.0 at review time; reference concepts unless the chosen project can comply with the license |
+| [HyperFrames Motion Library](https://github.com/nutllwhy/hyperframes-motion-library) | parameterized local motion templates and transparent-overlay formats | no repository license was declared at review time; do not copy code or assets without permission or a clear license |
+| [Rachel Digital Human Production](https://github.com/Jingyi-Wu-Richael/rachel-digital-human-production) | paid-call preflight, 15-second approval gate, job-state tracking | MIT at review time; its MiniMax path is not a dependency of this skill |
+
+Use these as comparative references. The public Skill's executable contract is
+defined only by this repository and the selected host-project adapters.

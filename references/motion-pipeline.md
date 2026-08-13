@@ -65,6 +65,12 @@ scene boundaries, hide the presenter when a dense page needs the canvas, and
 test every overlay against the focal card, URL, cursor, code, and captions. Do
 not allow a late accidental full-screen presenter shot.
 
+Generate the geometry from measured face centers rather than trusting automatic
+`cover` cropping. During the opening-to-PIP handoff, use the two-view pattern in
+`references/presenter-compositing.md` when a single interpolated crop produces a
+black edge or framing jump. Both presenter views remain muted and synchronized
+to the locked WAV.
+
 ## Render handoff
 
 1. Copy only the locked audio, presenter master, base visuals, and captions into
@@ -72,4 +78,7 @@ not allow a late accidental full-screen presenter shot.
 2. Build the timeline from the generation manifest.
 3. Run lint/typecheck and a handful of still frames before a full render.
 4. Render the final media and a contact sheet.
-5. Run the QC script and archive redacted manifests beside the deliverable.
+5. Run a full decode, black/freeze detection, loudness, duration-sync, and
+   checksum pass. Classify only timeline-declared readable holds as intentional.
+6. Archive the QC JSON, contact sheet, PIP geometry report, and redacted provider
+   ledger beside the deliverable.

@@ -1,4 +1,4 @@
 interface:
   display_name: "Digital Human Video Production"
-  short_description: "Build verified presenter-led product videos"
-  default_prompt: "Use $digital-human-video-production to produce a verified presenter-led product video with a locked voice, avatar master, motion timeline, and QC report."
+  short_description: "Build audited digital-human videos with PIP and QC"
+  default_prompt: "Use $digital-human-video-production to build a preview-gated presenter video with a locked voice, measured PIP, one full master, and delivery QC."
