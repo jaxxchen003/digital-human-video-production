@@ -50,7 +50,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--duration", required=True, type=float)
     parser.add_argument("--intro-seconds", default=3.0, type=float)
-    parser.add_argument("--circle-size", default=180, type=int)
+    parser.add_argument("--circle-size", default=220, type=int)
+    parser.add_argument("--margin-x", default=42, type=int)
+    parser.add_argument("--bottom-margin", default=66, type=int)
     parser.add_argument("--scene-ends", help="comma-separated scene end times in seconds")
     parser.add_argument("--left-scenes", default="", help="1-based scene indexes, e.g. 4,9,10")
     parser.add_argument("--output", required=True, type=Path)
@@ -65,6 +67,8 @@ def main() -> int:
         "duration_seconds": round(args.duration, 3),
         "opening_fullscreen_seconds": round(args.intro_seconds, 3),
         "circle_diameter_px": args.circle_size,
+        "horizontal_margin_px": args.margin_x,
+        "bottom_margin_px": args.bottom_margin,
         "allowed_positions": ["bottom-left", "bottom-right"],
         "later_fullscreen_or_hero_shots": 0,
         "schedule": schedule,

@@ -8,6 +8,7 @@ topic, copy, visual identity, or provider.
 
 ```json
 {
+  "schema_version": "2.0",
   "title": "Product explainer",
   "language": "zh-CN",
   "audience": "",
@@ -28,10 +29,19 @@ topic, copy, visual identity, or provider.
     "media_qc": "FFmpeg + ffprobe + Python"
   },
   "approved_audio": "audio/narration-master.wav",
+  "audio_timing_authority": true,
+  "provider_generation_policy": {
+    "preview_required": true,
+    "human_preview_approval_required": true,
+    "full_master_budget": 1,
+    "scene_layout_changes_must_be_local": true
+  },
   "presenter_layout": {
     "opening_mode": "prominent",
     "compact_mode": "circle-or-rectangle-pip",
     "allowed_positions": ["bottom-left", "bottom-right"],
+    "compact_diameter_px": 220,
+    "measured_crop_report": "config/pip-geometry.json",
     "later_fullscreen": false,
     "caption_keepout_ratio": 0.17
   },
@@ -62,6 +72,9 @@ project/
 │   ├── production.json
 │   ├── narration-segments.json
 │   ├── avatar-schedule.json
+│   ├── pip-face-centers.json
+│   ├── pip-geometry.json
+│   ├── approved-holds.json
 │   └── shot-manifest.json
 ├── audio/
 │   ├── narration-master.wav
@@ -78,6 +91,7 @@ project/
 │   ├── qc.json
 │   └── contact-sheet.png
 └── logs/
+    └── provider-generation.jsonl
 ```
 
 Raw audio, provider outputs, captured customer pages, fonts with unclear
@@ -91,14 +105,16 @@ schemas, templates, redacted manifests, and QC evidence—not private media.
 2. **Voice gate** — one narration candidate is approved by listening; the chosen
    WAV, generation settings, and checksum are recorded.
 3. **Presenter gate** — a short preview is approved for cadence, expression,
-   eye contact, lip sync, crop, and freeze behavior.
+   eye contact, lip sync, crop, and freeze behavior. The approval references the
+   locked audio checksum and authorizes at most one full-master generation.
 4. **Timeline gate** — scene boundaries, captions, page captures, and presenter
    schedule all use the locked voice clock.
 5. **Delivery gate** — technical, visual, audio, provenance, and checksum checks
    pass; known limitations are explicitly recorded.
 
 The workflow may continue after a failed gate only with a `preview` or
-`candidate` label. A later voice or claim change reopens downstream gates.
+`candidate` label. A later voice or claim change reopens downstream gates. Keep
+provider events append-only; local layout revisions reuse the completed master.
 
 ## Claim and asset discipline
 

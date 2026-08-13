@@ -1,6 +1,6 @@
 ---
 name: digital-human-video-production
-description: Produce a verified presenter-led product video from a brief, an approved voice master, an avatar or talking-head render, real product captures, and deterministic motion/compositing. Use when asked to plan, generate, revise, render, or QC a digital-human explainer, demo, tutorial, or launch video; keep product claims, brand tokens, media, provider IDs, and credentials in the project, never in this reusable skill.
+description: Produce a verified presenter-led product video from a brief, an approved voice master, an avatar or talking-head render, real product captures, and deterministic motion/compositing. Use when asked to plan, generate, revise, render, or QC a digital-human explainer, demo, tutorial, or launch video, including preview-gated provider generation, measured presenter PIP framing, generation-ledger controls, and delivery QC; keep product claims, brand tokens, media, provider IDs, and credentials in the project, never in this reusable skill.
 ---
 
 # Digital human video production
@@ -86,8 +86,10 @@ renderer or filmed presenter may be substituted):
 
 Do not generate one provider clip per scene unless the brief explicitly requires
 it. Avoid fixed smiles, looped breathing, sudden camera pushes, frozen poses,
-and motion that competes with the product surface. Keep provider job records
-private and redact IDs before archiving a QC report.
+and motion that competes with the product surface. Use
+`references/provider-job-ledger.md` to enforce one completed full master per
+locked audio checksum. Keep provider job records private and redact IDs before
+archiving a QC report.
 
 ### 4. Build the information-first visual timeline
 
@@ -106,11 +108,17 @@ assets, fixed frame tables, or a branded look into a new project.
 
 ### 5. Composite presenter and product locally
 
-Use a deterministic timeline keyed to the locked voice. A robust default pattern
+Read `references/presenter-compositing.md`. Use a deterministic timeline keyed to
+the locked voice. A robust default pattern
 is: presenter is prominent only for the opening/context beat, then becomes a
 small circular or rectangular PIP; it moves to an unoccupied corner, or hides,
 when the product surface needs the space. Make all values configurable by
 aspect-ratio and scene density rather than hard-coding a client's composition.
+
+Measure face centers from several frames before selecting the PIP crop. Keep the
+provider master muted and use the locked WAV as the only soundtrack. If one
+interpolated full-to-PIP layer reveals black source edges or jumps framing,
+crossfade synchronized full-frame and measured-crop views of the same master.
 
 Keep captions in a reserved band, animate PIP entry with a short settle, and test
 the overlay against every focal element. The presenter is the narrator, not the
@@ -134,8 +142,10 @@ delivery requires:
   densest information, connector/result handoff, and close;
 - video/audio metadata matching the project manifest and duration ceiling;
 - loudness and true-peak checks with no clipping;
-- no black event beyond the configured threshold and no presenter freeze beyond
-  the configured threshold;
+- no black event beyond the configured threshold and no presenter-master freeze
+  beyond the configured threshold;
+- final-render freezes classified against declared readable-hold intervals;
+- a full decode pass and duration sync within the configured tolerance;
 - renderer lint/typecheck/build and motion validation passing, with warnings
   reviewed;
 - SHA-256 checksums for the final video, voice master, and presenter master;
@@ -151,12 +161,26 @@ Run from the skill root:
 ```bash
 python3 scripts/init_project.py --path ./my-video --title "Product explainer"
 python3 scripts/build_avatar_schedule.py --duration 120 --output ./my-video/config/avatar-schedule.json
-python3 scripts/validate_delivery.py --video ./my-video/deliverables/final.mp4 --output ./my-video/deliverables/qc.json
+python3 scripts/build_pip_geometry.py \
+  --measurements ./my-video/config/pip-face-centers.json \
+  --output ./my-video/config/pip-geometry.json
+python3 scripts/record_provider_job.py \
+  --log ./my-video/logs/provider-generation.jsonl \
+  --provider avatar-provider --stage preview --status completed \
+  --audio ./my-video/audio/narration-master.wav \
+  --output ./my-video/presenter/preview.mp4
+python3 scripts/validate_delivery.py \
+  --video ./my-video/deliverables/final.mp4 \
+  --voice-master ./my-video/audio/narration-master.wav \
+  --presenter-master ./my-video/presenter/master.mp4 \
+  --approved-holds ./my-video/config/approved-holds.json \
+  --contact-sheet ./my-video/deliverables/contact-sheet.jpg \
+  --output ./my-video/deliverables/qc.json
 ```
 
-The scripts are standard-library Python. Delivery validation optionally invokes
-local `ffprobe` and `ffmpeg`; it never calls a provider, uploads media, or opens
-an MCP connection. The host project supplies provider adapters and renderer
+The scripts are standard-library Python. Delivery validation requires local
+`ffprobe` and `ffmpeg`; no bundled script calls a provider, uploads media, or
+opens an MCP connection. The host project supplies provider adapters and renderer
 commands.
 
 ## Reference routing
@@ -165,6 +189,8 @@ commands.
 - runtime/tool dependencies and provider boundaries: `references/dependencies.md`
 - voice cadence, breaths, mastering, and preview gate: `references/voice-pipeline.md`
 - avatar preview/full-master boundary and motion prompt: `references/avatar-pipeline.md`
+- private provider events and the one-full-master budget: `references/provider-job-ledger.md`
+- measured crop, synchronized layers, muted presenter, and PIP geometry: `references/presenter-compositing.md`
 - motion grammar, timeline schema, and renderer handoff: `references/motion-pipeline.md`
 - technical, audio, visual, and provenance QC: `references/qc-checklist.md`
 - generic connector/MCP result handoff: `references/mcp-connector-handoff.md`
